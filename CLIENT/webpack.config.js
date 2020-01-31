@@ -66,7 +66,7 @@ module.exports = {
     new ExtractTextPlugin({ filename: 'style.css' }),
     new HtmlWebpackPlugin({
       template: './resources/index.html',
-      filename: './index.html',
+      filename: 'index.html',
       hash: true,
     }),
   ],
