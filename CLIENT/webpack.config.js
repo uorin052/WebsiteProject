@@ -1,9 +1,10 @@
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const {CleanWebpackPlugin} = require('clean-webpack-plugin');
 
 module.exports = {
   entry: [
-    'babel-polyfill',
+    '@babel/polyfill',
     './src/index.js',
   ],
 
@@ -21,7 +22,12 @@ module.exports = {
       {
         test: /\.(js|jsx)$/,
         exclude: /node_modules/,
-        use: ['babel-loader'],
+        use: {
+           loader: 'babel-loader',
+           options: {
+             presets: ['@babel/preset-env']
+           }  
+        },
       },
 
       {
@@ -37,10 +43,15 @@ module.exports = {
 
       {
         test: /\.scss$/,
-        use: ExtractTextPlugin.extract({
-          fallback: 'style-loader',
-          use: [{ loader: 'css-loader', options: { minimize: true } }, 'sass-loader'],
-        }),
+        use: [
+            { 
+              loader: MiniCssExtractPlugin.loader, 
+              options: { minimize: true } 
+            },
+             'css-loader',
+             'sass-loader'
+            ],
+        
       },
       {
         test: /\.html$/,
@@ -63,7 +74,8 @@ module.exports = {
   },
 
   plugins: [
-    new ExtractTextPlugin({ filename: 'style.css' }),
+    new CleanWebpackPlugin(),
+    new MiniCssExtractPlugin(),
     new HtmlWebpackPlugin({
       template: './resources/index.html',
       filename: 'index.html',
